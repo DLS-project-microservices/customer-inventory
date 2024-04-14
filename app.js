@@ -1,11 +1,17 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
 import express from 'express';
+import cors from 'cors';
 import productRoutes from './routes/products.js';
 import categoryRoutes from './routes/categories.js';
 import insertSampleData from './db/seed.js';
 
 const app = express();
+
+app.use(cors({
+    credentials: true,
+    origin: "*"
+}));
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
