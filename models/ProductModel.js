@@ -2,21 +2,31 @@ import mongoose from 'mongoose';
 import Category from './CategoryModel.js';
 
 const productSchema = new mongoose.Schema({
-    name: {
+   _id: {
+       type: Number,
+       required: true
+   },
+   name: {
        type: String,
        required: true
-    },
-    description: {
+   },
+   description: {
        type: String,
        default: 'There is no description for this product yet.'
-    },
-    quantity: {
+   },
+   quantity: {
        type: Number,
        default: 0
-    },
-    categories: [Category.schema]
- });
- 
+   },
+   quantity: {
+      type: Number,
+      default: 0.0
+  },
+   categories: [{ 
+       type: Number,
+       ref: 'Category' 
+   }]
+});
  const Product = mongoose.model('Product', productSchema);
 
 export default Product;
