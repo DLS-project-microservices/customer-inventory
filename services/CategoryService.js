@@ -27,16 +27,20 @@ async function updateCategory(categoryId, newData) {
 async function deleteCategory(categoryId) {
     try {
         const category = await Category.findById(categoryId);
-
-        if (category.products.length > 0) {
-            await Product.updateMany({ _id: { $in: category.products } }, { $pull: { categories: categoryId } });
-        }
+        
+        const productsIds = category.products;
+        
+        await Promise.all(productsIds.map(async productsId => {
+            const product = await Product.findById(productsId);
+            if (product) {
+                product.categories = product.categories.filter(catId => catId.toString() !== categoryId.toString());
+                await product.save();
+            }
+        }));
 
         await Category.findByIdAndDelete(categoryId);
-
-        return { message: 'Category deleted successfully' };
     } catch (error) {
-        throw new Error(`Error deleting category: ${error.message}`);
+        throw new Error(`Failed to delete category: ${error.message}`);
     }
 }
 
