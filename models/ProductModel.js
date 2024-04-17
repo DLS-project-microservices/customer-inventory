@@ -1,14 +1,16 @@
 import mongoose from 'mongoose';
-import Category from './CategoryModel.js';
 
 const productSchema = new mongoose.Schema({
    _id: {
        type: Number,
-       required: true
+       required: true,
+       unique: true,
+
    },
    name: {
        type: String,
-       required: true
+       required: true,
+       unique: true,
    },
    description: {
        type: String,
@@ -18,17 +20,16 @@ const productSchema = new mongoose.Schema({
        type: Number,
        default: 0
    },
-   quantity: {
+   price: {
       type: Number,
-      default: 0.0
-  },
+      default: 0
+   },
    categories: [{ 
-       type: Number,
-       ref: 'Category' 
-   }]
+      type: Number,
+      ref: 'Category'
+  }]
 });
- const Product = mongoose.model('Product', productSchema);
+
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;
-
- 

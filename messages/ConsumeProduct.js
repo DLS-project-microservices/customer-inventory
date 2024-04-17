@@ -23,26 +23,24 @@ async function consumeProductEvents() {
         channel.consume(assertQueue.queue, async (msg) => {
             try {
                 const message = JSON.parse(msg.content.toString());
-                console.log('Received product event:', message);
                 if (message.status === 'created') {
-                    console.log(message)
-                    await ProductService.createProduct({
+                    const data = {
                         _id: message.product.id,
                         name: message.product.name,
                         description: message.product.description,
                         quantity: message.product.quantity,
                         categories: message.product.categories.map(category => category.id)
-                    });
+                    }
+                    ProductService.createProduct(data)
                 } else if (message.status === 'updated') {
-                    await ProductService.updateProduct(
-                        message.product.id,
-                        {
-                            _id: message.product.id,
-                            name: message.product.name,
-                            description: message.product.description,
-                            quantity: message.product.quantity,
-                            categories: message.product.categories.map(category => category.id)
-                        });
+                    const data = {
+                        _id: message.product.id,
+                        name: message.product.name,
+                        description: message.product.description,
+                        quantity: message.product.quantity,
+                        categories: message.product.categories.map(category => category.id)
+                    }
+                    await ProductService.updateProduct(message.product.id, data);
                 } else if (message.status === 'deleted') {
                     await ProductService.deleteProduct(message.product.id);
                 }
