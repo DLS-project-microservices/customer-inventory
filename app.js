@@ -1,10 +1,12 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
+import connectToRabbitMQ from './messages/connection.js';
+import consumeProductEvents from './messages/ConsumeProduct.js';
 import express from 'express';
 import cors from 'cors';
 import productRoutes from './routes/products.js';
 import categoryRoutes from './routes/categories.js';
-import insertSampleData from './db/seed.js';
+
 
 const app = express();
 
@@ -20,14 +22,20 @@ const PORT = process.env.PORT || 8090;
 
 try {
     await mongoose.connect(process.env.DB_URL);
-    await insertSampleData();
     app.listen(PORT, () => console.log('Server is listening on port', PORT))
-
 }
 catch(error) {
     console.log(error);
 }
 
+connectToRabbitMQ()
+    .then(() => {
+        console.log('Connected to RabbitMQ');
+        consumeProductEvents(); 
+    })
+    .catch((error) => {
+        console.error('Error connecting to RabbitMQ:', error);
+    });
 
 
 
