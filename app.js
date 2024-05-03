@@ -6,6 +6,7 @@ import express from 'express';
 import cors from 'cors';
 import productRoutes from './routes/products.js';
 import categoryRoutes from './routes/categories.js';
+import consumeCategoryEvents from './messages/ConsumeCategory.js';
 
 
 const app = express();
@@ -32,6 +33,7 @@ connectToRabbitMQ()
     .then(() => {
         console.log('Connected to RabbitMQ');
         consumeProductEvents(); 
+        consumeCategoryEvents();
     })
     .catch((error) => {
         console.error('Error connecting to RabbitMQ:', error);
