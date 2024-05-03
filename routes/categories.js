@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getCategories, getCategoryById } from '../services/categories.js';
+import CategoryService from '../services/CategoryService.js'
+
 
 const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const categories = await getCategories();
+        const categories = await CategoryService.getCategories()
         res.status(200).send({ data: categories });   
     }
     catch(error) {
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const category = await getCategoryById(id);
+        const category = await CategoryService.getCategoryById(id);
         if (!category) {
             return res.status(404).send({
                 message: `Could not find category with id: ${id}`

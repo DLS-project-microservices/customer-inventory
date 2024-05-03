@@ -1,16 +1,17 @@
-import Category from './models/Category';
-import Product from './models/Product';
+import Product from "../models/ProductModel.js";
+import Category from "../models/CategoryModel.js";
 
-async function createCategory(categoryData) {
+const CategoryService = {
+async createCategory(categoryData) {
     try {
         const category = await Category.create(categoryData);
         return category;
     } catch (error) {
         throw new Error(`Error creating category: ${error.message}`);
     }
-}
+},
 
-async function updateCategory(categoryId, newData) {
+async updateCategory(categoryId, newData) {
     try {
         const updatedCategory = await Category.findByIdAndUpdate(categoryId, {
             $set: {
@@ -22,9 +23,9 @@ async function updateCategory(categoryId, newData) {
     } catch (error) {
         throw new Error(`Error updating category: ${error.message}`);
     }
-}
+},
 
-async function deleteCategory(categoryId) {
+async deleteCategory(categoryId) {
     try {
         const category = await Category.findById(categoryId);
         
@@ -42,6 +43,18 @@ async function deleteCategory(categoryId) {
     } catch (error) {
         throw new Error(`Failed to delete category: ${error.message}`);
     }
+},
+
+async getCategories() {
+    const categories = await Category.find();
+    return categories;
+},
+
+async getCategoryById(id) {
+    const category = await Category.findById(id);
+    return category;
+},
+
 }
 
-export { createCategory, updateCategory, deleteCategory };
+export default CategoryService;

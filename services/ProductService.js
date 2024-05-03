@@ -100,27 +100,7 @@ const ProductService = {
         }
       },
 
-      async updateCategoriesProduct(product) {
-        try {
-            const categoriesToUpdate = product.categories;
-            const products = await Product.find({ categories: { $in: categoriesToUpdate } });
-            const uniqueCategoryIds = [...new Set(categoriesToUpdate)];
-
-            await Promise.all(uniqueCategoryIds.map(async (categoryId) => {
-                const category = await Category.findById(categoryId);
-                if (category) {
-                    category.products = products.filter(p => p.categories.includes(categoryId)).map(p => p._id);
-                    await category.save();
-                }
-            }));
-        } catch (error) {
-            throw new Error(`Failed to update categories: ${error.message}`);
-        }
-    },
 
 };
-
-
-  
   
   export default ProductService;
