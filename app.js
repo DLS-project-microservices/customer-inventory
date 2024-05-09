@@ -9,6 +9,7 @@ import categoryRoutes from './routes/categories.js';
 import stripeRouter from './routes/stripe.js'
 import consumeCategoryEvents from './messages/ConsumeCategory.js';
 
+console.log(process.env.DB_URL)
 const app = express();
 
 app.use(cors({
