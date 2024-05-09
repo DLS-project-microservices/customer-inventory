@@ -6,8 +6,8 @@ import express from 'express';
 import cors from 'cors';
 import productRoutes from './routes/products.js';
 import categoryRoutes from './routes/categories.js';
+import stripeRouter from './routes/stripe.js'
 import consumeCategoryEvents from './messages/ConsumeCategory.js';
-
 
 const app = express();
 
@@ -15,9 +15,11 @@ app.use(cors({
     credentials: true,
     origin: "*"
 }));
+app.use(express.json());
 
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/checkout', stripeRouter);
 
 const PORT = process.env.PORT || 8090;
 
