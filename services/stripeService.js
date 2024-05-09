@@ -18,28 +18,26 @@ const stripeService = {
                 if (!item) {
                     throw new Error(`Item with productId ${product._id} not found`);
                 }
-
+                
                 const quantity = item.quantity;
                 return {
                     price_data: {
                         currency: 'usd',
                         product_data: {
                             name: product.name,
-                            description: product.description
                         },
-                        // TODO: Replace with actual price when price added to database use product.price
-                        unit_amount: 123 * 100,
+                        unit_amount: product.price * 100,
                     },
                     quantity: quantity,
                 };
             });
-
+    
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
                 line_items: lineItems,
                 mode: 'payment',
-                success_url: 'https://yourwebsite.com/success',
-                cancel_url: 'https://yourwebsite.com/cancel',
+                success_url: 'http://localhost:3000',
+                cancel_url: 'http://localhost:3000',
             });
 
             return {

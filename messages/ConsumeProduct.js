@@ -28,6 +28,7 @@ async function consumeProductEvents() {
                         _id: message.product.id,
                         name: message.product.name,
                         description: message.product.description,
+                        price: message.product.price,
                         quantity: message.product.quantity,
                         categories: message.product.categories.map(category => category.id)
                     }
@@ -37,6 +38,7 @@ async function consumeProductEvents() {
                         _id: message.product.id,
                         name: message.product.name,
                         description: message.product.description,
+                        price: message.product.price,
                         quantity: message.product.quantity,
                         categories: message.product.categories.map(category => category.id)
                     }

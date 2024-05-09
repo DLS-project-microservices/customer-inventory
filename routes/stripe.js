@@ -7,7 +7,6 @@ router.post('/', async (req, res) => {
     try {
       const { items } = req.body;
   
-
       const paymentIntent = await stripeService.createPaymentIntent(items);
   
       res.status(200).json(paymentIntent);
