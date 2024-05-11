@@ -9,8 +9,8 @@ services:
       - mongo
       - rabbitmq
     environment:
-      MONGODB_URI: "mongodb://mongo:27017/mydatabase"
-      RABBITMQ_URI: "amqp://rabbitmq"
+      DB_URL: "mongodb://mongo:27017/inventory"
+      AMQP_HOST: "rabbitmq"
 
   mongo:
     image: mongo
