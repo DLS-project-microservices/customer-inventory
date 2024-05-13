@@ -5,9 +5,9 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try {
-      const { items } = req.body;
-  
-      const paymentIntent = await stripeService.createPaymentIntent(items);
+      const orderDetails = req.body;
+
+      const paymentIntent = await stripeService.createPaymentIntent(orderDetails);
   
       res.status(200).json(paymentIntent);
       

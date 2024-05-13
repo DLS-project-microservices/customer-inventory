@@ -7,13 +7,13 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const stripeService = {
-    async createPaymentIntent(items) {
+    async createPaymentIntent(orderDetails) {
         try {
-            const productIds = items.map(item => item.productId);
+            const productIds = orderDetails.items.map(item => item.productId);
             const products = await Product.find({ _id: { $in: productIds } });
 
             const lineItems = products.map(product => {
-                const item = items.find(item => item.productId === product._id);
+                const item = orderDetails.items.find(item => item.productId === product._id);
 
                 if (!item) {
                     throw new Error(`Item with productId ${product._id} not found`);
@@ -25,6 +25,10 @@ const stripeService = {
                         currency: 'usd',
                         product_data: {
                             name: product.name,
+                            metadata: {
+                                product_id: product._id,
+                                product_name: product.name,
+                            },
                         },
                         unit_amount: product.price * 100,
                     },
@@ -38,6 +42,14 @@ const stripeService = {
                 mode: 'payment',
                 success_url: 'http://localhost:3000',
                 cancel_url: 'http://localhost:3000',
+                metadata: {
+                    firstName: orderDetails.customer.firstName,
+                    lastName: orderDetails.customer.lastName,
+                    email: orderDetails.customer.email,
+                    city: orderDetails.customer.city,
+                    address: orderDetails.customer.address,
+                    postalCode: orderDetails.customer.postalCode
+                }
             });
 
             return {

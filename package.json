@@ -5,7 +5,8 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "echo not implemented yet"
+    "test": "echo not implemented yet",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
