@@ -21,7 +21,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/checkout', stripeRouter);
 
-const PORT = process.env.PORT || 8090;
+const PORT = process.env.PORT || 3001;
 
 try {
     await mongoose.connect(process.env.DB_URL);
