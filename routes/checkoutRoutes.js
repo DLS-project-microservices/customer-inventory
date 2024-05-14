@@ -1,5 +1,5 @@
 import express from 'express';
-import stripeService from '../services/stripeService.js';
+import stripeService from '../services/checkoutService.js';
 
 const router = express.Router();
 

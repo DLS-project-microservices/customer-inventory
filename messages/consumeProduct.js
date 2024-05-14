@@ -1,5 +1,5 @@
 import connectToRabbitMQ from './connection.js';
-import ProductService from '../services/ProductService.js';
+import ProductService from '../services/productService.js';
 
 async function consumeProductEvents() {
     try {

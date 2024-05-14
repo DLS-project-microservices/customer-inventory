@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import dotenv from 'dotenv';
-import Product from '../models/ProductModel.js';
+import Product from '../models/productModel.js';
 
 dotenv.config();
 

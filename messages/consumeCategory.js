@@ -1,5 +1,5 @@
 import connectToRabbitMQ from './connection.js';
-import CategoryService from '../services/CategoryService.js';
+import categoryService from '../services/categoryService.js';
 
 async function consumeCategoryEvents() {
     try {
@@ -31,16 +31,16 @@ async function consumeCategoryEvents() {
                         name: message.category.name,
                         description: message.category.categoryDescription,
                     }
-                    CategoryService.createCategory(data)
+                    categoryService.createCategory(data)
                 } else if (message.status === 'updated') {
                     const data = {
                         _id: message.category.id,
                         name: message.category.name,
                         description: message.category.categoryDescription,
                     }
-                    await CategoryService.updateCategory(message.category.id, data);
+                    await categoryService.updateCategory(message.category.id, data);
                 } else if (message.status === 'deleted') {
-                    await CategoryService.deleteCategory(message.category.id);
+                    await categoryService.deleteCategory(message.category.id);
                 }
                 console.log('Category event processed successfully');
                 channel.ack(msg)

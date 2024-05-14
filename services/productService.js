@@ -1,5 +1,5 @@
-import Product from "../models/ProductModel.js";
-import Category from "../models/CategoryModel.js";
+import Product from "../models/productModel.js";
+import Category from "../models/categoryModel.js";
 
 const ProductService = {
     async createProduct(productData) {
