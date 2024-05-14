@@ -1,13 +1,16 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import connectToRabbitMQ from './messages/connection.js';
-import consumeProductEvents from './messages/ConsumeProduct.js';
+import consumeProductEvents from './messages/consumeProduct.js';
 import express from 'express';
 import cors from 'cors';
-import productRoutes from './routes/products.js';
-import categoryRoutes from './routes/categories.js';
-import stripeRouter from './routes/stripe.js'
-import consumeCategoryEvents from './messages/ConsumeCategory.js';
+import productRoutes from './routes/productRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import stripeRouter from './routes/checkoutRoutes.js'
+import consumeCategoryEvents from './messages/consumeCategory.js';
+
+await mongoose.connect(process.env.DB_URL);
+await consumeProductEvents(); 
+await consumeCategoryEvents();
 
 const app = express();
 
@@ -23,23 +26,8 @@ app.use('/api/checkout', stripeRouter);
 
 const PORT = process.env.PORT || 8090;
 
-try {
-    await mongoose.connect(process.env.DB_URL);
-    app.listen(PORT, () => console.log('Server is listening on port', PORT))
-}
-catch(error) {
-    console.log(error);
-}
+app.listen(PORT, () => console.log('Server is listening on port', PORT))
 
-connectToRabbitMQ()
-    .then(() => {
-        console.log('Connected to RabbitMQ');
-        consumeProductEvents(); 
-        consumeCategoryEvents();
-    })
-    .catch((error) => {
-        console.error('Error connecting to RabbitMQ:', error);
-    });
 
 
 
