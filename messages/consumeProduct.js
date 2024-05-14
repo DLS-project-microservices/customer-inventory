@@ -1,13 +1,13 @@
-import connectToRabbitMQ from './connection.js';
+import { connectToRabbitMQ } from 'amqplib-retry-wrapper-dls';
 import ProductService from '../services/productService.js';
 
-async function consumeProductEvents() {
-    try {
-        const connection = await connectToRabbitMQ();
-        const channel = await connection.createChannel();
-        const exchange = 'product';
-        const queue = 'product_events';
+const channel = await connectToRabbitMQ(process.env.AMQP_HOST);
 
+async function consumeProductEvents() {
+    const exchange = 'product';
+    const queue = 'product_events';
+    
+    try {
         await channel.assertExchange(exchange, 'direct', {
             durable: true
         });
