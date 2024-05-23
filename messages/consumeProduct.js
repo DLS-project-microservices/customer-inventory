@@ -30,7 +30,9 @@ async function consumeProductEvents() {
                         description: message.product.description,
                         price: message.product.price,
                         quantity: message.product.quantity,
-                        categories: message.product.categories.map(category => category.id)
+                        categories: message.product.categories.map(category => category.id),
+                        createdAt: message.product.createdAt,
+                        updatedAt: message.product.updatedAt,
                     }
                     ProductService.createProduct(data)
                 } else if (message.status === 'updated') {
@@ -40,7 +42,8 @@ async function consumeProductEvents() {
                         description: message.product.description,
                         price: message.product.price,
                         quantity: message.product.quantity,
-                        categories: message.product.categories.map(category => category.id)
+                        categories: message.product.categories.map(category => category.id),
+                        updatedAt: message.product.updatedAt
                     }
                     await ProductService.updateProduct(message.product.id, data);
                 } else if (message.status === 'deleted') {

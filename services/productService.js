@@ -23,45 +23,51 @@ const ProductService = {
     async updateProduct(productId, updateData) {
         try {
             const existingProduct = await Product.findById(productId);
-    
-            const product = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+            if (updateData.updatedAt > existingProduct.updatedAt) {
+                const product = await Product.findByIdAndUpdate(productId, updateData, { new: true });
             
-            const categoriesToAdd = [];
-            const categoriesToRemove = [];
-    
-            updateData.categories.forEach(categoryId => {
-                if (!existingProduct.categories.includes(categoryId)) {
-                    categoriesToAdd.push(categoryId);
-                }
-            });
-    
-            existingProduct.categories.forEach(categoryId => {
-                if (!updateData.categories.includes(categoryId)) {
-                    categoriesToRemove.push(categoryId);
-                }
-            });
-    
-            await Promise.all(categoriesToAdd.map(async categoryId => {
-                const category = await Category.findById(categoryId);
-                if (category) {
-                    category.products.push(productId);
-                    await category.save();
-                }
-            }));
-    
-            await Promise.all(categoriesToRemove.map(async categoryId => {
-                const category = await Category.findById(categoryId);
-                if (category) {
-                    category.products = category.products.filter(prodId => prodId.toString() !== productId.toString());
-                    await category.save();
-                }
-            }));
-    
-            return product;
+                const categoriesToAdd = [];
+                const categoriesToRemove = [];
+        
+                updateData.categories.forEach(categoryId => {
+                    if (!existingProduct.categories.includes(categoryId)) {
+                        categoriesToAdd.push(categoryId);
+                    }
+                });
+        
+                existingProduct.categories.forEach(categoryId => {
+                    if (!updateData.categories.includes(categoryId)) {
+                        categoriesToRemove.push(categoryId);
+                    }
+                });
+        
+                await Promise.all(categoriesToAdd.map(async categoryId => {
+                    const category = await Category.findById(categoryId);
+                    if (category) {
+                        category.products.push(productId);
+                        await category.save();
+                    }
+                }));
+        
+                await Promise.all(categoriesToRemove.map(async categoryId => {
+                    const category = await Category.findById(categoryId);
+                    if (category) {
+                        category.products = category.products.filter(prodId => prodId.toString() !== productId.toString());
+                        await category.save();
+                    }
+                }));
+                console.log(`Product with id: '${productId}' was updated.`);
+
+                return product;      
+            }
+            else {
+                console.log(`Update message for product with ID: '${productId}' was ignored because it was older than the current version.\nIncoming message timestamp: ${updateData.updatedAt}\nTimestamp on product: ${existingProduct.updatedAt}\n`)
+            }      
         } catch (error) {
             throw new Error(`Failed to update product: ${error.message}`);
         }
     },
+    
     async deleteProduct(productId) {
         try {
             const product = await Product.findById(productId);
