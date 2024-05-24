@@ -27,7 +27,15 @@ const productSchema = new mongoose.Schema({
    categories: [{ 
       type: Number,
       ref: 'Category'
-  }]
+  }],
+   createdAt: {
+      type: String,
+      required: true
+   },
+   updatedAt: {
+      type: String,
+      required: true
+   }
 });
 
 const Product = mongoose.model('Product', productSchema);
